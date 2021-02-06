@@ -4,5 +4,26 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+    "extensions": {
+		"unwantedRecommendations": [
+			"ms-vscode.notepadplusplus-keybindings"
+		],
+		"recommendations": [
+			"coenraads.bracket-pair-colorizer-2",
+            "emmanuelbeziat.vscode-great-icons",
+			"daylerees.rainglow",
+			"humao.rest-client",
+            "ms-vscode-remote.remote-wsl",
+			"shardulm94.trailing-spaces"
+		]
+	},
+	"settings": {
+		"breadcrumbs.enabled": true,
+		"editor.minimap.enabled": true,
+		"workbench.iconTheme": "vscode-great-icons",
+		"git.autofetch": true,
+		"git.allowForcePush": true,
+		"git.followTagsWhenSync": true,
+		"git.showPushSuccessNotification": true
+    }
 }
