@@ -19,13 +19,13 @@ The script walks through the following steps in creating the Start Menu
 >	- 	The index position is incremented by 2
 >	- 	The next application is read, and placed at 0,2
 >	- 	The third application is read and positioned at 0,4
->	- 	The index position is incremented by 2, which exceeds the group limit space of 6 (0 to 5), so the column is reset to set, but the row is incremented by 2 
+>	- 	The index position is incremented by 2, which exceeds the group limit space of 6 (0 to 5), so the column is reset to set, but the row is incremented by 2
 >	- 	The forth application is read, and placed at 2,0 and so on.
 
 If an application in your regex array is not found, it is skipped and moves on to the next application.  If the application is installed at a later time, the pin is placed in the order you specify.  
 
 ```powershell
-[string[]]$groupOrder2NoSub = '^Outlook(\s\d{4})?$', '^Word(\s\d{4})?$', '^Excel(\s\d{4})?$', '^PowerPoint(\s\d{4})?$', '^OneNote(\s\d{4})?$', '^Access(\s\d{4})?$', '^Publisher(\s\d{4})?$', '^Project(\s\d{4})?$', '^Visio(\s\d{4})?$'  
+[string[]]$groupOrder2NoSub = '^Outlook(\s\d{4})?$', '^Word(\s\d{4})?$', '^Excel(\s\d{4})?$', '^PowerPoint(\s\d{4})?$', '^OneNote(\s\d{4})?$', '^Access(\s\d{4})?$', '^Publisher(\s\d{4})?$', '^Project(\s\d{4})?$', '^Visio(\s\d{4})?$'
 ```
 
 ![Default Start Menu](https://kryptykhermit.github.io/PowerShell/StartMenuBuilderV2/StartMenuOverview.jpg)
