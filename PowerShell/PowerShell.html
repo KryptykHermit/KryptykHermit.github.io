@@ -60,17 +60,21 @@
             <li>The first regular expression is read in each array, and detects the applications named within the
                 Get-StartApps PowerShell command.</li>
             <li>A pin is created using a 2x2 size starting at position 0,0</li>
-            <li>The index position is incremented by 2</li>
+            <li>The index column position is incremented by 2</li>
             <li>The next application is read, and placed at 0,2</li>
+            <li>The index column position is incremented by 2</li>
             <li>The third application is read and positioned at 0,4</li>
-            <li>The index position is incremented by 2, which exceeds the group limit space of 6 (0 to 5), so the column
-                is reset to set, but the row is incremented by 2</li>
+            <li>The index column position is incremented by 2</li>
+            <li>The current column index exceeds the max size value for the group, so the column position is reset to
+                zero and the row is incremented by 2</li>
             <li>The forth application is read, and placed at 2,0 and so on.</li>
         </ul>
     </blockquote>
     <p>If an application in your regex array is not found, it is skipped and moves on to the next application. If the
         application is installed at a later time, the pin is placed in the order you specify.</p>
-    <pre><code class="language-powershell"><div>[<span class="hljs-built_in">string</span>[]]<span class="hljs-variable">$groupOrder2NoSub</span> = <span class="hljs-string">&#x27;^Outlook(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Word(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Excel(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^PowerPoint(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^OneNote(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Access(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Publisher(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Project(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Visio(\s\d{4})?$&#x27;</span>
+    <pre>
+        <code class="language-powershell">
+            <div>[<span class="hljs-built_in">string</span>[]]<span class="hljs-variable">$groupOrder2NoSub</span> = <span class="hljs-string">&#x27;^Outlook(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Word(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Excel(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^PowerPoint(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^OneNote(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Access(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Publisher(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Project(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Visio(\s\d{4})?$&#x27;</span>
 </div></code></pre>
     <p><img src="https://kryptykhermit.github.io/PowerShell/StartMenuBuilderV2/StartMenuOverview.jpg"
             alt="Default Start Menu"></p>
