@@ -6,14 +6,8 @@
     Creates an SCCM report based off of a selected deployment and exports the result to CSV or XLSX format (if module is installed)
     Places the result file on the desktop for easy consumption
 
-    .PARAMETER SQLServer
-    Specifies the name of the SQL Server
-
     .PARAMETER MECMServer
     Specifies the name of the MECM (Microsoft Endpoint Configuration Manager) Primary Site Server
-
-    .PARAMETER Database
-    Specifies the name of the MECM database 
 
     .PARAMETER Namespace
     Specifies the name of the MECM CIM site path
@@ -21,13 +15,11 @@
     .INPUTS
 
     .OUTPUTS
-    
+
     .LINK
     Online version: https://kryptykhermit.github.io/MECM/DeploymentReportBuilder/Invoke-ReportBuilder.html
 #>
-[string]$SQLServer    = 'conds176.cms.local'
-[string]$MECMServer   = 'conap851.cms.local'
-[string]$Database     = 'CM_P00'
+[string]$MECMServer   = 'sccm.home.lab'
 [string]$namespace    = 'root\sms\site_P00'
 
 # Using the registry hive in case this is launched from VDI, where the paths do not translate correctly
@@ -191,7 +183,7 @@ Write-Host
 # Status Details per object
 Write-Host "Acquiring Deployment Statuses" -ForegroundColor 'Yellow'
 [string]$cimClassName = 'SMS_AppDeploymentAssetDetails'
-$DeploymentDevices = @(Get-CimInstance -ClassName $cimClassName -Namespace $namespace -ComputerName $SCCMServer -Filter "AppName='$($AssignmentID.ApplicationName)' and CollectionID='$($AssignmentID.CollectionID)'" |
+$DeploymentDevices = @(Get-CimInstance -ClassName $cimClassName -Namespace $namespace -ComputerName $MECMServer -Filter "AppName='$($AssignmentID.ApplicationName)' and CollectionID='$($AssignmentID.CollectionID)'" |
     Select-Object -Property @{n='AppStatusType';e={$appStatusType[$_.AppStatusType]}}, `
                             'CollectionID', 'CollectionName', `
                             @{n='DeploymentIntent';e={$deploymentIntent[$_.DeploymentIntent]}}, `
@@ -204,7 +196,7 @@ Write-Host "--- Detected : $($DeploymentDevices.Count) Installation Statuses" -F
 # Get each object and append status details
 [string]$cimClassName = 'SMS_CM_RES_COLL_' + $DeploymentDevices[0].CollectionID
 Write-Host "--- Detected : Deployment Collection Name is '$cimClassName'" -ForegroundColor 'Green'
-$deploymentCollection = @(Get-CimInstance -ClassName $cimClassName -Namespace $namespace -ComputerName $SCCMServer |
+$deploymentCollection = @(Get-CimInstance -ClassName $cimClassName -Namespace $namespace -ComputerName $MECMServer |
     Select-Object -Property 'IsClient', 'Name', 'ResourceID', 'ResourceType', 'ADLastLogonTime', 'BoundaryGroups', 'ClientVersion', 'LastMPServerName', 'LastActiveTime', `
                             'LastClientCheckTime', 'LastHardwareScan', 'LastPolicyRequest', 'LastSoftwareScan', 'LastStatusMessage')
 Write-Host "--- Detected : $($deploymentCollection.Count) $($AssignmentID[0].CollectionType) Objects" -ForegroundColor 'Green'
@@ -222,7 +214,7 @@ $deploymentCollection |
         else {
             $obj = $DeploymentDevices[$DeploymentDevices.MachineID.IndexOf($_.ResourceID)]
         }
-        
+
         if ($obj.MachineName -eq $_.Name) {
             $null = $ReportInfo.Add(
                 [pscustomobject]@{
@@ -293,7 +285,7 @@ try {
     # Max Length of table headers
     Write-Host "--- Processing Column Count" -ForegroundColor 'Green'
     $titleLength = NumberToAlphabet -n ($reportInfo | Get-Member -MemberType:NoteProperty).Count
-    
+
     # Create new Excel report file
     Write-Host "--- Creating Conditional Text Coloring Schema" -ForegroundColor 'Green'
     $text1 = New-ConditionalText -Text 'Success' -BackgroundColor 'Green' -ConditionalTextColor 'White' -Range E:E
@@ -342,4 +334,4 @@ catch {
 }
 Write-Host
 Write-Host " -= Processing Complete! =-" -ForegroundColor 'Yellow'
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5

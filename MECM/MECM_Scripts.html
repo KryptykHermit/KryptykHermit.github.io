@@ -42,41 +42,28 @@
     <h5 id="filename-invoke-deploymentreportps1">Filename: <a href="https://KryptykHermit.github.io/MECM/DeploymentReportBuilder/Invoke-DeploymentReport.ps1">Invoke-DeploymentReport.ps1</a></h5>
     <p>A deployment reporting tool that shows success, failure, in progress, and unknown objects using CIM.<br>
         The resulting report is saved on the users desktop as a CSV file, or if <a href="https://www.powershellgallery.com/packages/ImportExcel/7.1.0">ImportExcel</a> PowerShell module is installed, an Excel formatted worksheet.</p>
-    <p>The script walks through the following steps in creating the Start Menu</p>
+    <p>The script walks through the following steps in creating the report</p>
     <ol>
-        <li>Specify the location of the new StartMenuLayout.xml file</li>
-        <li>Set the number of columns</li>
-        <li>Specify the group name(s)</li>
-        <li>Provide a priority driven regular expression grouping for each pin to be created (see note #1)</li>
-        <li>Acquire the current list of Start Menu applications</li>
-        <li>Create the sections of the XML and save to the location provided</li>
-        <li>Kill the StartMenuExperienceHost process to refresh the layout</li>
+        <li>CIM is used to gather all current deployments</li>
+        <li>User is prompted to select a deployment and targeted collection</li>
+        <li>The targeted collection is enumerated to account for all devices deployed to</li>
+        <li>CIM is used to get the status of the current deployment (note: this excluded Unknown)</li>
+        <li>The targeted collection is then enumerated, pulling in the result if found based off of resource ID</li>
+        <li>A CSV file is saved to the desktop, or processing continues if ImportExcel is installed</li>
+        <li>An Excel worksheet is created, sorted, highlighting status result, and freezing top 2 rows</li>
+        <li>The report is saved to the desktop in XLSX format and launched.</li>
     </ol>
     <blockquote>
-        <p><strong>NOTE #1</strong></p>
-        <ul>
-            <li>The first regular expression is read in each array, and detects the applications named within the
-                Get-StartApps PowerShell command.</li>
-            <li>A pin is created using a 2x2 size starting at position 0,0</li>
-            <li>The index column position is incremented by 2</li>
-            <li>The next application is read, and placed at 0,2</li>
-            <li>The index column position is incremented by 2</li>
-            <li>The third application is read and positioned at 0,4</li>
-            <li>The index column position is incremented by 2</li>
-            <li>The current column index exceeds the max size value for the group, so the column position is reset to
-                zero and the row is incremented by 2</li>
-            <li>The forth application is read, and placed at 2,0 and so on.</li>
-        </ul>
+        <p><strong>NOTE</strong></p>
+        To remove the launching, remove the -SHOW switch
     </blockquote>
-    <p>If an application in your regex array is not found, it is skipped and moves on to the next application. If the
-        application is installed at a later time, the pin is placed in the order you specify.</p>
     <pre>
         <code class="language-powershell">
             <div>[<span class="hljs-built_in">string</span>[]]<span class="hljs-variable">$groupOrder2NoSub</span> = <span class="hljs-string">&#x27;^Outlook(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Word(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Excel(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^PowerPoint(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^OneNote(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Access(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Publisher(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Project(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Visio(\s\d{4})?$&#x27;</span>
-</div></code></pre>
+            </div>
+        </code>
+    </pre>
     <p><img src="https://kryptykhermit.github.io/PowerShell/StartMenuBuilderV2/StartMenuOverview.jpg"
             alt="Default Start Menu"></p>
-
 </body>
-
 </html>
