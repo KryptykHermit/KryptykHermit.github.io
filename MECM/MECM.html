@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Microsoft Endpoint Configuration Manager</title>
+    <style>
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css"
+        integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet"
+        type="text/css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+
+</head>
+
+<body class="vscode-body vscode-light">
+    <h2 id="dynamic-start-menu-builder">Dynamic Start Menu Builder</h2>
+    <h5 id="date-2021-04-28">Date: 2021-04-28</h5>
+    <h5 id="filename-invoke-powershellbuilderps1">Filename: <a
+            href="https://KryptykHermit.github.io/PowerShell/StartMenuBuilderV2/Invoke-StartMenuBuilder.ps1">Invoke-PowerShellBuilder.ps1</a>
+    </h5>
+    <p>This is my take on a dynamic Start Menu builder for Windows 10. It will probably work on Windows 7 and 8 with a
+        little adjustment.</p>
+    <p>The script walks through the following steps in creating the Start Menu</p>
+    <ol>
+        <li>Specify the location of the new StartMenuLayout.xml file</li>
+        <li>Set the number of columns</li>
+        <li>Specify the group name(s)</li>
+        <li>Provide a priority driven regular expression grouping for each pin to be created (see note #1)</li>
+        <li>Acquire the current list of Start Menu applications</li>
+        <li>Create the sections of the XML and save to the location provided</li>
+        <li>Kill the StartMenuExperienceHost process to refresh the layout</li>
+    </ol>
+    <blockquote>
+        <p><strong>NOTE #1</strong></p>
+        <ul>
+            <li>The first regular expression is read in each array, and detects the applications named within the
+                Get-StartApps PowerShell command.</li>
+            <li>A pin is created using a 2x2 size starting at position 0,0</li>
+            <li>The index column position is incremented by 2</li>
+            <li>The next application is read, and placed at 0,2</li>
+            <li>The index column position is incremented by 2</li>
+            <li>The third application is read and positioned at 0,4</li>
+            <li>The index column position is incremented by 2</li>
+            <li>The current column index exceeds the max size value for the group, so the column position is reset to
+                zero and the row is incremented by 2</li>
+            <li>The forth application is read, and placed at 2,0 and so on.</li>
+        </ul>
+    </blockquote>
+    <p>If an application in your regex array is not found, it is skipped and moves on to the next application. If the
+        application is installed at a later time, the pin is placed in the order you specify.</p>
+    <pre>
+        <code class="language-powershell">
+            <div>[<span class="hljs-built_in">string</span>[]]<span class="hljs-variable">$groupOrder2NoSub</span> = <span class="hljs-string">&#x27;^Outlook(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Word(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Excel(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^PowerPoint(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^OneNote(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Access(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Publisher(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Project(\s\d{4})?$&#x27;</span>, <span class="hljs-string">&#x27;^Visio(\s\d{4})?$&#x27;</span>
+</div></code></pre>
+    <p><img src="https://kryptykhermit.github.io/PowerShell/StartMenuBuilderV2/StartMenuOverview.jpg"
+            alt="Default Start Menu"></p>
+
+</body>
+
+</html>
